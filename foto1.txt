@@ -1,0 +1,529 @@
+///////
+//sql//
+///////
+
+USE [dbdem]
+GO
+/****** Object:  Table [dbo].[Activity]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Activity](
+	[id] [int] NOT NULL,
+	[id_event] [int] NOT NULL,
+	[name] [varchar](220) NOT NULL,
+	[day] [int] NOT NULL,
+	[time] [time](7) NOT NULL,
+	[id_moderator] [int] NOT NULL,
+ CONSTRAINT [PK_Activity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[City]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[City](
+	[id] [int] NOT NULL,
+	[name] [varchar](60) NOT NULL,
+	[coat_of_arms] [varbinary](max) NULL,
+ CONSTRAINT [PK_City] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Country]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Country](
+	[id] [int] NOT NULL,
+	[name_rus] [varchar](140) NOT NULL,
+	[name_eng] [varchar](140) NOT NULL,
+	[cod] [varchar](4) NOT NULL,
+	[cod2] [varchar](4) NOT NULL,
+ CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Event]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Event](
+	[id] [int] NOT NULL,
+	[name] [varchar](220) NOT NULL,
+	[start_date] [date] NOT NULL,
+	[day] [int] NOT NULL,
+	[id_winner] [int] NULL,
+	[id_city] [int] NULL,
+	[photo] [varbinary](max) NULL,
+ CONSTRAINT [PK_Event] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Jury_Activity]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Jury_Activity](
+	[id] [int] NOT NULL,
+	[id_activity] [int] NOT NULL,
+	[id_user] [int] NOT NULL,
+ CONSTRAINT [PK_Jury_Activity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Participants_Activity]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Participants_Activity](
+	[id] [int] NOT NULL,
+	[id_activity] [int] NOT NULL,
+	[id_user] [int] NOT NULL,
+	[grade] [int] NULL,
+ CONSTRAINT [PK_Participants_Activity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Role]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Role](
+	[id] [int] NOT NULL,
+	[name] [varchar](30) NOT NULL,
+ CONSTRAINT [PK_Role] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[User]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[User](
+	[id] [int] NOT NULL,
+	[first_name] [varchar](50) NOT NULL,
+	[last_name] [varchar](50) NOT NULL,
+	[patronymic] [varchar](50) NULL,
+	[mail] [varchar](120) NULL,
+	[password] [varchar](12) NOT NULL,
+	[date_birth] [date] NOT NULL,
+	[id_country] [int] NOT NULL,
+	[telephone] [nchar](21) NULL,
+	[gender] [char](1) NOT NULL,
+	[direction] [varchar](80) NULL,
+	[event] [varchar](80) NULL,
+	[photo] [varbinary](max) NULL,
+	[id_role] [int] NOT NULL,
+ CONSTRAINT [PK_User_1] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Activity]  WITH CHECK ADD  CONSTRAINT [FK_Activity_Event] FOREIGN KEY([id_event])
+REFERENCES [dbo].[Event] ([id])
+GO
+ALTER TABLE [dbo].[Activity] CHECK CONSTRAINT [FK_Activity_Event]
+GO
+ALTER TABLE [dbo].[Activity]  WITH CHECK ADD  CONSTRAINT [FK_Activity_User] FOREIGN KEY([id_moderator])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Activity] CHECK CONSTRAINT [FK_Activity_User]
+GO
+ALTER TABLE [dbo].[Event]  WITH CHECK ADD  CONSTRAINT [FK_Event_City] FOREIGN KEY([id_city])
+REFERENCES [dbo].[City] ([id])
+GO
+ALTER TABLE [dbo].[Event] CHECK CONSTRAINT [FK_Event_City]
+GO
+ALTER TABLE [dbo].[Event]  WITH CHECK ADD  CONSTRAINT [FK_Event_User1] FOREIGN KEY([id_winner])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Event] CHECK CONSTRAINT [FK_Event_User1]
+GO
+ALTER TABLE [dbo].[Jury_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Jury_Activity_Activity] FOREIGN KEY([id_activity])
+REFERENCES [dbo].[Activity] ([id])
+GO
+ALTER TABLE [dbo].[Jury_Activity] CHECK CONSTRAINT [FK_Jury_Activity_Activity]
+GO
+ALTER TABLE [dbo].[Jury_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Jury_Activity_User] FOREIGN KEY([id_user])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Jury_Activity] CHECK CONSTRAINT [FK_Jury_Activity_User]
+GO
+ALTER TABLE [dbo].[Participants_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Participants_Activity_Activity] FOREIGN KEY([id_activity])
+REFERENCES [dbo].[Activity] ([id])
+GO
+ALTER TABLE [dbo].[Participants_Activity] CHECK CONSTRAINT [FK_Participants_Activity_Activity]
+GO
+ALTER TABLE [dbo].[Participants_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Participants_Activity_User1] FOREIGN KEY([id_user])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Participants_Activity] CHECK CONSTRAINT [FK_Participants_Activity_User1]
+GO
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Country1] FOREIGN KEY([id_country])
+REFERENCES [dbo].[Country] ([id])
+GO
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Country1]
+GO
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Role1] FOREIGN KEY([id_role])
+REFERENCES [dbo].[Role] ([id])
+GO
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Role1]
+GO
+
+/////////
+//0sql0//
+/////////
+
+
+///////
+//cod//
+//////
+
+
+//using System.IO;
+
+    //public static dbdemEntities1 _context;
+    //public static dbdemEntities1 GetContext()
+    //{
+    //    if (_context == null)
+    //        _context = new dbdemEntities1();
+    //    return _context;
+    //}
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            AddAll(
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\роли.csv",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Cтраны.csv",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\user.csv", "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Участники_import\\",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Город.csv",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Мероприятия.csv", "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Мероприятия_import\\",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Активности.csv");
+        }
+
+        public static void AddAll(string strRole, string strCountry, string strUser, string strPhotoUser, string strCity, string strEvent, string strPhotoEvent, string strActivity)
+        {
+            AddRole(strRole);
+            AddCountry(strCountry);
+            AddUser(strUser, strPhotoUser);
+            AddCity(strCity);
+            AddEvent(strEvent, strPhotoEvent);
+            AddActivity(strActivity);
+        }
+
+
+            public static void AddRole( string strRole)
+        {
+            int id;
+            string name;
+            byte[] fileData = File.ReadAllBytes(strRole);
+            string csvData = Encoding.UTF8.GetString(fileData);
+
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    name = num[1];
+                    dbdemEntities1.GetContext().Role.Add(new Role { id = id, name = name});
+                }
+            }
+            dbdemEntities1.GetContext().SaveChanges();
+            Console.WriteLine("файл загружен1");
+        }
+
+
+
+        public static void AddCountry(string strCountry)
+        {
+
+            int id;
+            string nr;
+            string na;
+            string cod;
+            string cod2;
+            byte[] fileData = File.ReadAllBytes(strCountry);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    nr = num[1];
+                    na = num[2];
+                    cod = num[3];
+                    cod2 = num[4];
+                    dbdemEntities1.GetContext().Country.Add(new Country { id = id, name_rus= nr, name_eng = na, cod = cod, cod2= cod2});
+
+                }
+            }
+            dbdemEntities1.GetContext().SaveChanges();
+            Console.WriteLine("файл загружен2");
+        }
+
+
+
+
+        public static void AddUser(string strUser, string strPhoto)
+        {
+            int id;
+            string f;
+            string n;
+            string o;
+            string mail;
+            string password;
+            DateTime date_birth;
+            int id_country;
+            string telephone;
+            string gender;
+            string direction;
+            string _event;
+            byte[] photo;
+            int role;
+
+            byte[] fileData = File.ReadAllBytes(strUser);
+            string csvData = Encoding.UTF8.GetString(fileData);
+
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    f = num[1];
+                    n = num[2];
+                    o = num[3];
+                    mail = num[4];
+                    password = num[5];
+                    string g;
+                    try
+                    {
+                        g = $"{num[6][0]}{num[6][1]}/{num[6][3]}{num[6][4]}/{num[6][6]}{num[6][7]}{num[6][8]}{num[6][9]}";
+                        date_birth = DateTime.Parse(g);
+                    }
+                    catch
+                    {
+                        g = $"{num[6][3]}{num[6][4]}/{num[6][0]}{num[6][1]}/{num[6][6]}{num[6][7]}{num[6][8]}{num[6][9]}";
+                        date_birth = DateTime.Parse(g);
+
+                    }  
+                    id_country = Convert.ToInt32(num[7]);
+                    telephone = num[8];
+                    gender = num[9];
+                    direction = num[10];
+                    _event = num[11];
+                    photo = File.ReadAllBytes($"{strPhoto}{num[12]}");
+                    role = Convert.ToInt32(num[13]);
+                    dbdemEntities1.GetContext().User.Add(new User { id = id, first_name = f, last_name = n, patronymic = o, mail = mail, password = password, date_birth = date_birth, id_country = id_country, telephone = telephone, gender = gender, direction = direction, @event = _event, photo = photo, id_role = role });
+                }
+            }
+            dbdemEntities1.GetContext().SaveChanges();
+            Console.WriteLine("файл загружен3");
+        }
+
+        public static void AddCity(string strCity)
+        {
+            byte[] fileData = File.ReadAllBytes(strCity);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            int id;
+            string name;
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    
+                    name = num[1];
+                    dbdemEntities1.GetContext().City.Add(new City { id = id, name = name });
+                    if (Convert.ToInt32(num[0]) == 1117)
+                        break;
+                }
+                dbdemEntities1.GetContext().SaveChanges();
+                Console.WriteLine("файл загружен4");
+            }
+        }
+
+
+        
+
+        public static void AddEvent(string strEvent, string strPhoto)
+        {
+            byte[] fileData = File.ReadAllBytes(strEvent);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            int id;
+            string name;
+            DateTime date;
+            int day;
+            int? win;
+            int id_city;
+            byte[] photo;
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    name = num[1];
+                    string g;
+                    try
+                    {
+                        g = $"{num[2][0]}{num[2][1]}/{num[2][3]}{num[2][4]}/{num[2][6]}{num[2][7]}{num[2][8]}{num[2][9]}";
+                        date = DateTime.Parse(g);
+                    }
+                    catch
+                    {
+                        g = $"{num[2][3]}{num[2][4]}/{num[2][0]}{num[2][1]}/{num[2][6]}{num[2][7]}{num[2][8]}{num[2][9]}";
+                        date = DateTime.Parse(g);
+                    }
+                    day = Convert.ToInt32(num[3]);
+                    try
+                    {
+                        win = Convert.ToInt32(num[4]);
+                    }
+                    catch
+                    {
+                        win = null;
+                    }
+                    
+                    id_city = Convert.ToInt32(num[5]);
+                    try
+                    {
+                        photo = File.ReadAllBytes($"{strPhoto}{num[6]}.jpg");
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            photo = File.ReadAllBytes($"{strPhoto}{num[6]}.jpeg");
+                        }
+                        catch
+                        {
+                            photo = File.ReadAllBytes($"{strPhoto}{num[6]}.png");
+                        }
+                        
+                    }
+                    
+                    dbdemEntities1.GetContext().Event.Add(new Event { id = id, name = name, start_date = date, day = day, id_winner = win, id_city= id_city, photo = photo  });
+                }
+                dbdemEntities1.GetContext().SaveChanges();
+                Console.WriteLine("файл загружен5");
+            }
+        }
+
+        public static void AddActivity(string strActivity)
+        {
+            
+            byte[] fileData = File.ReadAllBytes(strActivity);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            int id;
+            int id_mer;
+            string name;
+            int day;
+            TimeSpan t;
+            int id_m;
+
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    
+                    id = Convert.ToInt32(num[0]);
+                    
+                    id_mer = Convert.ToInt32(num[1]);
+                    name = num[2];
+                    day = Convert.ToInt32(num[3]);
+                    t = TimeSpan.Parse(num[4]);
+                    id_m = Convert.ToInt32(num[5]);
+                    dbdemEntities1.GetContext().Activity.Add(new Activity { id = id, id_event = id_mer, name = name, day = day, time = t , id_moderator = id_m });
+                    if(id==30)
+                    {
+                        break;
+                    }
+                }
+                dbdemEntities1.GetContext().SaveChanges();
+                Console.WriteLine("файл загружен6");
+            }
+        }
+    }
+
+/////////
+//0cod0//
+////////
+
+
+

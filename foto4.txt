@@ -1,0 +1,670 @@
+//Extended.Wpf.Toolkit
+//EntityFramework
+
+//app
+
+<Style TargetType="Button">
+            <Setter Property="Background" Value="#FFF7F6F6"></Setter>
+            <Setter Property="BorderThickness" Value="1.5"></Setter>
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+        </Style>
+
+
+//Manager
+
+ public static Frame mainFrame { get; set; }
+
+        public static int _id;
+        public static string _first_name;
+        public static string _last_name;
+        public static string _patronymic;
+        public static string _mail; 
+        public static string _telephone;
+        public static string _gender;
+        public static byte[] _photo;
+        public static int _id_role;
+
+        public static void SetUser(int id, string first_name, string last_name, string patronymic, string mail, string telephone, string gender, byte[] photo, int id_role)
+        {
+            _id = id;
+            _first_name = first_name;
+            _last_name = last_name;
+            _patronymic = patronymic;
+            _mail = mail;
+            _telephone = telephone;
+            _gender = gender;
+            _photo = photo;
+            _id_role = id_role;
+        }
+
+
+        public static string GetTime()
+        {
+            string time;
+            if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour <= 11)
+                time = "утро";
+            else if (DateTime.Now.Hour > 11 && DateTime.Now.Hour <= 18)
+                time = "день";
+            else if (DateTime.Now.Hour > 18 && DateTime.Now.Hour <= 24)
+                time = "вечер";
+            else
+                time = "ночи";
+            return time;
+        }
+
+
+
+
+//MainWindow
+
+//WPF
+
+    <Grid>
+        <Frame Name="FrameWindow" NavigationUIVisibility="Hidden"></Frame>
+    </Grid>
+
+//CS
+
+public MainWindow()
+        {
+            InitializeComponent();
+            Manager.mainFrame = FrameWindow;
+            Manager.mainFrame.Navigate(new StartWindow());
+        }
+
+
+
+
+
+
+
+//StartWindow
+
+//WPF
+
+<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="22*"/>
+            <RowDefinition Height="170*"/>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black" Grid.Row="0" BorderThickness="1"></Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="9"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="269*"/>
+                <ColumnDefinition Width="122*"/>
+                <ColumnDefinition Width="9"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Вход в систему" Grid.Row="1" Grid.Column="1" Click="AuthorizationClick">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"></Setter>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+        <Border Grid.Row="1"></Border>
+        <TextBlock Grid.Row="0" Text="Начальное окно"  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Arial" FontSize="18"></TextBlock>
+        <TextBlock Grid.Row="1" Text="" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Arial" FontSize="16" Name="textStart"></TextBlock>
+        <TextBlock Grid.Row="1" Text="Мероприятия" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontFamily="Arial" FontSize="18"></TextBlock>
+        <DataGrid Grid.Row="2" Name="dataGridName" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding name}" Width="400"></DataGridTextColumn>
+                <DataGridTextColumn Header="start time" Binding="{Binding start_date}" Width="120"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Картинка">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding photo}" Width="200" Height="200" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
+
+//CS
+
+public StartWindow()
+        {
+            InitializeComponent();
+            dataGridName.ItemsSource = DemDBEntities.GetContext().Event.ToList();
+            textStart.Text = $"Доброе {Manager.GetTime()}!";
+        }
+
+        private void AuthorizationClick(object sender, RoutedEventArgs e)
+        {
+            Manager.mainFrame.Navigate(new PageAuthorization());
+        }
+
+
+
+
+
+
+//PageAuthorization
+
+//WPF
+
+<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="195*"/>
+            <ColumnDefinition Width="283*"/>
+            <ColumnDefinition Width="94*"/>
+            <ColumnDefinition Width="228*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="123*"/>
+            <RowDefinition Height="53*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="53*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="95*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Arial" FontSize="16" Text="Логин(id): "></TextBlock>
+        <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Arial" FontSize="16" Text="Пароль: "></TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Name="textLogin" ToolTip="Введите id"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="1" Visibility="Hidden" Name="textVisiblePassword" ToolTip="Введите пароль"></TextBox>
+        <PasswordBox  Grid.Row="3" Grid.Column="1" Name="textPassword"></PasswordBox>
+        <Button Grid.Row="3" Grid.Column="2" Click="PasswordVisibilityClick" Content="👁️" FontSize="20"></Button>
+        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Content="Вход" Click="LoginClick">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"></Setter>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Content="Регистрация">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"></Setter>
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>
+
+//CS
+
+private int _count = 0;
+        public PageAuthorization()
+        {
+            InitializeComponent();
+        }
+
+        private void PasswordVisibilityClick(object sender, RoutedEventArgs e)
+        {
+            if (textPassword.Visibility == Visibility.Visible)
+            {
+                textPassword.Visibility = Visibility.Hidden;
+                textVisiblePassword.Visibility = Visibility.Visible;
+                textVisiblePassword.Text = textPassword.Password;
+            }
+            else
+            {
+                textPassword.Visibility = Visibility.Visible;
+                textVisiblePassword.Visibility = Visibility.Hidden;
+                textPassword.Password = textVisiblePassword.Text;
+            }
+        }
+
+        private void LoginClick(object sender, RoutedEventArgs e)
+        {
+            
+            try
+            {
+                int login;
+                string password;
+                login = int.Parse(textLogin.Text);
+                if (textPassword.Visibility == Visibility.Visible)
+                    password = textPassword.Password;
+                else
+                    password = textVisiblePassword.Text;
+                var logUser = DemDBEntities.GetContext().User.Where(p => p.id == login && p.password == password).ToList();
+                if (logUser.Count > 0)
+                {
+                    if (logUser[0].password == password)
+                    {
+                        Manager.SetUser(logUser[0].id, logUser[0].first_name, logUser[0].last_name, logUser[0].patronymic, logUser[0].mail, logUser[0].telephone, logUser[0].gender, logUser[0].photo, logUser[0].id_role);
+                        Manager.mainFrame.Navigate(new PageUser());
+                    }
+                    else
+                    {
+                        OpenCaptcha();
+                    }
+                }
+                else
+                {
+                    OpenCaptcha();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Неправильный ввод данных");
+            }         
+        }
+        private void OpenCaptcha()
+        {
+            _count++;
+            if (_count >= 3)
+            {
+
+            }
+            else
+                MessageBox.Show("Логин или пароль неверный");
+        }
+
+
+
+//PageUser
+
+//wpf
+
+<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="107*"/>
+            <ColumnDefinition Width="293*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38*"/>
+            <RowDefinition Height="187*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1.5"></Border>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Name="textLog" Text="" FontFamily="Arial" FontSize="24"></TextBlock>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="181*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="209*"/>
+                <RowDefinition Height="18*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="94*"/>
+                <RowDefinition Height="13*"/>
+            </Grid.RowDefinitions>
+            <Image Grid.Row="1" Grid.Column="1" Name="imageUser"></Image>
+            <Button Grid.Column="1" Grid.Row="4"></Button>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="116*"/>
+                <ColumnDefinition Width="323*"/>
+                <ColumnDefinition Width="147*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26*"/>
+                <RowDefinition Height="29*"/>
+                <RowDefinition Height="101*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="94*"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="114*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="2" Grid.Column="1" Visibility="Hidden"></Button>
+            <Button Grid.Row="4" Grid.Column="1" Visibility="Hidden"></Button>
+            <Button Grid.Row="6" Grid.Column="1" Content="Жюри" Click="juryClick" Visibility="Hidden" Name="juryButton"></Button>
+
+        </Grid>
+    </Grid>
+
+//cs
+
+public PageUser()
+        {
+            InitializeComponent();
+            
+            if (Manager._photo != null)
+            {
+                BitmapImage img = new BitmapImage();
+                MemoryStream ms = new MemoryStream(Manager._photo);
+                img.BeginInit();
+                img.StreamSource = ms;
+                img.EndInit();
+                imageUser.Source = img;
+            }
+
+            if(Manager._id_role == 1)
+            {
+                textLog.Text = "Окно Организатора";
+                juryButton.Visibility = Visibility.Visible;
+            }
+            if (Manager._id_role == 2)
+            {
+                textLog.Text = "Окно Модератора";
+
+            }
+            if (Manager._id_role == 3)
+            {
+                textLog.Text = "Окно Жюри";
+                
+            }
+            if (Manager._id_role == 4)
+            {
+                textLog.Text = "Окно Участника";
+
+            }
+        }
+
+        private void juryClick(object sender, RoutedEventArgs e)
+        {
+            Manager.mainFrame.Navigate(new PageJury());
+        }
+
+
+
+//PageJury
+
+//WPF
+
+<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="11*"/>
+            <RowDefinition Height="64*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="165*"/>
+                <ColumnDefinition Width="447*"/>
+                <ColumnDefinition Width="188*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="назад" Click="BackClick"></Button>
+            <TextBlock Grid.Column="1" Text="Окно Жюри" FontFamily="Arial" FontSize="24"></TextBlock>
+            <Button Grid.Column="2" Content="добавить" Click="BackAdd"></Button>
+        </Grid>
+
+        <DataGrid Grid.Row="2" Name="dataGridName" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Binding="{Binding first_name}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="фамилия" Binding="{Binding last_name}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="отчество" Binding="{Binding patronymic}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="email" Binding="{Binding mail}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="пол" Binding="{Binding gender}" Width="*"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Картинка">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding photo}" Width="200" Height="200" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+
+//cs
+
+public PageJury()
+        {
+            InitializeComponent();
+            dataGridName.ItemsSource = DemDBEntities.GetContext().User.Where(p => p.id_role == 3).ToList();
+
+        }
+
+        private void BackClick(object sender, RoutedEventArgs e)
+        {
+            Manager.mainFrame.Content = null;
+            Manager.mainFrame.Navigate(new PageUser());
+        }
+
+        private void BackAdd(object sender, RoutedEventArgs e)
+        {
+            Manager.mainFrame.Navigate(new PageAddingModeratorJury());
+        }
+
+
+
+//PageAddingModeratorJury
+
+//WPF
+
+<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="197*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="397*"/>
+                <ColumnDefinition Width="403*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="219*"/>
+                    <RowDefinition Height="16*"/>
+                    <RowDefinition Height="29*"/>
+                    <RowDefinition Height="13*"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="29*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="188*"/>
+                    <ColumnDefinition Width="204*"/>
+                    <ColumnDefinition Width="11*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="1" Grid.Row="1" x:Name="photoUser"/>
+                <Button Grid.Column="1" Grid.Row="1" Background="Transparent" Click="clickPhotoUser" />
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Visibility="Hidden" Name="textPassV"/>
+                <PasswordBox Grid.Row="3" Grid.Column="1" Name="textPass"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Visibility="Hidden" Name="textPassV2"/>
+                <PasswordBox Grid.Row="5" Grid.Column="1" Name="textPass2"/>
+
+                <CheckBox Grid.Row="6" Name="passCheckBox"  Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Видимый пароль" FontSize="18" Unchecked="checkBox_Unchecked" Indeterminate="checkBox_Indeterminate" Checked="checkBox_Checked"/>
+
+                <Grid Grid.Row="7" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="83*"/>
+                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="81*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="ok" Click="okClick"/>
+                    <Button Grid.Column="2"/>
+
+                </Grid>
+
+            </Grid>
+
+
+
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="39*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="155*"/>
+                    <ColumnDefinition Width="242*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="1" Grid.Column="1" Background="#FF9E9D9D"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Id Number" FontFamily="Arial" FontSize="14"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="textId" Text="" FontFamily="Arial" FontSize="14"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="ФИО:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="3" Grid.Column="1" x:Name="textFIO"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Пол:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="5" Grid.Column="1" x:Name="polComboBox">
+                    <TextBlock><Run Text="Мужской"/></TextBlock>
+                    <TextBlock><Run Text="Женский"/></TextBlock>
+                </ComboBox>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Роль:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="7" Grid.Column="1" x:Name="roleComboBox" >
+                    <TextBlock><Run Text="Жюри"/></TextBlock>
+                    <TextBlock><Run Text="Модератор"/></TextBlock>
+                </ComboBox>
+
+                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Email:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="9" Grid.Column="1" x:Name="textEmail"/>
+
+                <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Телефон:" FontFamily="Arial" FontSize="14"/>
+                <xctk:MaskedTextBox Grid.Row="11" Grid.Column="1" Mask="+7 (000) 000-00-00" Name="textTl"/>
+
+                <TextBlock Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Направление:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="13" Grid.Column="1" Name="textD"/>
+
+                <CheckBox Grid.Row="15"  Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Прикрепить к мероприятию" Name="checkEvent"/>
+
+                <TextBlock Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Мероприятие:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="16" Grid.Column="1" x:Name="mComboBox"/>
+
+            </Grid>
+        </Grid>
+    </Grid>
+
+//CS
+
+int userId;
+        string link = "";
+
+        public PageAddingModeratorJury()
+        {
+            InitializeComponent();
+            var listEvent = DemDBEntities.GetContext().Event.ToList();
+            List<string> strEvents = new List<string>();
+            for(int i = 0; i < listEvent.Count; i++)
+            {
+                strEvents.Add(listEvent[i].name);
+            }
+            mComboBox.ItemsSource = strEvents;
+            var numUser = DemDBEntities.GetContext().User.ToList();
+            userId = numUser[numUser.Count-1].id+1;
+            textId.Text = $"{userId}";
+        }
+
+
+
+        private void clickPhotoUser(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                link = openFileDialog.FileName;
+                LoadImage(link);
+            }
+        }
+        private void LoadImage(string imagePath)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
+            bitmap.EndInit();
+            photoUser.Source = bitmap;
+        }
+
+        private void okClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string pol;
+                int role;
+                string eventId;
+                string pass;
+                byte[] photo;
+                if (polComboBox.SelectedIndex == 0)
+                    pol = "м";
+                else
+                    pol = "ж";
+                if (roleComboBox.SelectedIndex == 0)
+                    role = 3;
+                else
+                    role = 2;
+
+                if (checkEvent.IsChecked.Value)
+                    eventId = mComboBox.SelectedValue.ToString();
+                else
+                    eventId = null;
+                if(passCheckBox.IsChecked.Value)
+                {
+                    if (textPassV.Text == textPassV2.Text)
+                        pass = textPassV.Text;
+                    else
+                        throw new Exception("ошибка");
+                }
+                else
+                {
+                    if (textPass.Password == textPass2.Password)
+                        pass = textPassV.Text;
+                    else
+                        throw new Exception("ошибка");
+                }
+                photo = File.ReadAllBytes(link);
+
+                string[] strFIO = textFIO.Text.Split(' ');
+
+                DemDBEntities.GetContext().User.Add(new User { first_name = strFIO[0], last_name = strFIO[1], patronymic = strFIO[2], mail = textEmail.Text, password = pass, date_birth = DateTime.Now, id_country = 10, telephone = textTl.Text, gender = pol, direction = textD.Text, @event = eventId, photo = photo, id_role = role });
+                DemDBEntities.GetContext().SaveChanges();
+                Manager.mainFrame.Navigate(new PageUser());
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("ошибка ввода");
+            }
+        }
+
+        private void checkBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textPass.Visibility = Visibility.Visible;
+            textPassV.Visibility = Visibility.Hidden;
+            textPass.Password = textPassV.Text;
+
+            textPass2.Visibility = Visibility.Visible;
+            textPassV2.Visibility = Visibility.Hidden;
+            textPass2.Password = textPassV2.Text;
+        }
+
+        private void checkBox_Indeterminate(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            textPass.Visibility = Visibility.Hidden;
+            textPassV.Visibility = Visibility.Visible;
+            textPassV.Text = textPass.Password;
+
+            textPass2.Visibility = Visibility.Hidden;
+            textPassV2.Visibility = Visibility.Visible;
+            textPassV2.Text = textPass2.Password;
+        }
+
+

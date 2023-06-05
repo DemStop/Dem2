@@ -1,0 +1,928 @@
+///////
+//sql//
+///////
+
+USE [dbdem]
+GO
+/****** Object:  Table [dbo].[Activity]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Activity](
+	[id] [int] NOT NULL,
+	[id_event] [int] NOT NULL,
+	[name] [varchar](220) NOT NULL,
+	[day] [int] NOT NULL,
+	[time] [time](7) NOT NULL,
+	[id_moderator] [int] NOT NULL,
+ CONSTRAINT [PK_Activity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[City]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[City](
+	[id] [int] NOT NULL,
+	[name] [varchar](60) NOT NULL,
+	[coat_of_arms] [varbinary](max) NULL,
+ CONSTRAINT [PK_City] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Country]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Country](
+	[id] [int] NOT NULL,
+	[name_rus] [varchar](140) NOT NULL,
+	[name_eng] [varchar](140) NOT NULL,
+	[cod] [varchar](4) NOT NULL,
+	[cod2] [varchar](4) NOT NULL,
+ CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Event]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Event](
+	[id] [int] NOT NULL,
+	[name] [varchar](220) NOT NULL,
+	[start_date] [date] NOT NULL,
+	[day] [int] NOT NULL,
+	[id_winner] [int] NULL,
+	[id_city] [int] NULL,
+	[photo] [varbinary](max) NULL,
+ CONSTRAINT [PK_Event] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Jury_Activity]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Jury_Activity](
+	[id] [int] NOT NULL,
+	[id_activity] [int] NOT NULL,
+	[id_user] [int] NOT NULL,
+ CONSTRAINT [PK_Jury_Activity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Participants_Activity]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Participants_Activity](
+	[id] [int] NOT NULL,
+	[id_activity] [int] NOT NULL,
+	[id_user] [int] NOT NULL,
+	[grade] [int] NULL,
+ CONSTRAINT [PK_Participants_Activity] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Role]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Role](
+	[id] [int] NOT NULL,
+	[name] [varchar](30) NOT NULL,
+ CONSTRAINT [PK_Role] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[User]    Script Date: 04.06.2023 16:11:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[User](
+	[id] [int] NOT NULL,
+	[first_name] [varchar](50) NOT NULL,
+	[last_name] [varchar](50) NOT NULL,
+	[patronymic] [varchar](50) NULL,
+	[mail] [varchar](120) NULL,
+	[password] [varchar](12) NOT NULL,
+	[date_birth] [date] NOT NULL,
+	[id_country] [int] NOT NULL,
+	[telephone] [nchar](21) NULL,
+	[gender] [char](1) NOT NULL,
+	[direction] [varchar](80) NULL,
+	[event] [varchar](80) NULL,
+	[photo] [varbinary](max) NULL,
+	[id_role] [int] NOT NULL,
+ CONSTRAINT [PK_User_1] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Activity]  WITH CHECK ADD  CONSTRAINT [FK_Activity_Event] FOREIGN KEY([id_event])
+REFERENCES [dbo].[Event] ([id])
+GO
+ALTER TABLE [dbo].[Activity] CHECK CONSTRAINT [FK_Activity_Event]
+GO
+ALTER TABLE [dbo].[Activity]  WITH CHECK ADD  CONSTRAINT [FK_Activity_User] FOREIGN KEY([id_moderator])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Activity] CHECK CONSTRAINT [FK_Activity_User]
+GO
+ALTER TABLE [dbo].[Event]  WITH CHECK ADD  CONSTRAINT [FK_Event_City] FOREIGN KEY([id_city])
+REFERENCES [dbo].[City] ([id])
+GO
+ALTER TABLE [dbo].[Event] CHECK CONSTRAINT [FK_Event_City]
+GO
+ALTER TABLE [dbo].[Event]  WITH CHECK ADD  CONSTRAINT [FK_Event_User1] FOREIGN KEY([id_winner])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Event] CHECK CONSTRAINT [FK_Event_User1]
+GO
+ALTER TABLE [dbo].[Jury_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Jury_Activity_Activity] FOREIGN KEY([id_activity])
+REFERENCES [dbo].[Activity] ([id])
+GO
+ALTER TABLE [dbo].[Jury_Activity] CHECK CONSTRAINT [FK_Jury_Activity_Activity]
+GO
+ALTER TABLE [dbo].[Jury_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Jury_Activity_User] FOREIGN KEY([id_user])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Jury_Activity] CHECK CONSTRAINT [FK_Jury_Activity_User]
+GO
+ALTER TABLE [dbo].[Participants_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Participants_Activity_Activity] FOREIGN KEY([id_activity])
+REFERENCES [dbo].[Activity] ([id])
+GO
+ALTER TABLE [dbo].[Participants_Activity] CHECK CONSTRAINT [FK_Participants_Activity_Activity]
+GO
+ALTER TABLE [dbo].[Participants_Activity]  WITH CHECK ADD  CONSTRAINT [FK_Participants_Activity_User1] FOREIGN KEY([id_user])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Participants_Activity] CHECK CONSTRAINT [FK_Participants_Activity_User1]
+GO
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Country1] FOREIGN KEY([id_country])
+REFERENCES [dbo].[Country] ([id])
+GO
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Country1]
+GO
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Role1] FOREIGN KEY([id_role])
+REFERENCES [dbo].[Role] ([id])
+GO
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Role1]
+GO
+
+/////////
+//0sql0//
+/////////
+
+
+///////
+//cod//
+//////
+
+
+//using System.IO;
+
+    //public static dbdemEntities1 _context;
+    //public static dbdemEntities1 GetContext()
+    //{
+    //    if (_context == null)
+    //        _context = new dbdemEntities1();
+    //    return _context;
+    //}
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            AddAll(
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\роли.csv",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Cтраны.csv",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\user.csv", "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Участники_import\\",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Город.csv",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Мероприятия.csv", "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Мероприятия_import\\",
+                "C:\\Users\\sekre\\Desktop\\вариант2_ответ\\Активности.csv");
+        }
+
+        public static void AddAll(string strRole, string strCountry, string strUser, string strPhotoUser, string strCity, string strEvent, string strPhotoEvent, string strActivity)
+        {
+            AddRole(strRole);
+            AddCountry(strCountry);
+            AddUser(strUser, strPhotoUser);
+            AddCity(strCity);
+            AddEvent(strEvent, strPhotoEvent);
+            AddActivity(strActivity);
+        }
+
+
+            public static void AddRole( string strRole)
+        {
+            int id;
+            string name;
+            byte[] fileData = File.ReadAllBytes(strRole);
+            string csvData = Encoding.UTF8.GetString(fileData);
+
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    name = num[1];
+                    dbdemEntities1.GetContext().Role.Add(new Role { id = id, name = name});
+                }
+            }
+            dbdemEntities1.GetContext().SaveChanges();
+            Console.WriteLine("файл загружен1");
+        }
+
+
+
+        public static void AddCountry(string strCountry)
+        {
+
+            int id;
+            string nr;
+            string na;
+            string cod;
+            string cod2;
+            byte[] fileData = File.ReadAllBytes(strCountry);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    nr = num[1];
+                    na = num[2];
+                    cod = num[3];
+                    cod2 = num[4];
+                    dbdemEntities1.GetContext().Country.Add(new Country { id = id, name_rus= nr, name_eng = na, cod = cod, cod2= cod2});
+
+                }
+            }
+            dbdemEntities1.GetContext().SaveChanges();
+            Console.WriteLine("файл загружен2");
+        }
+
+
+
+
+        public static void AddUser(string strUser, string strPhoto)
+        {
+            int id;
+            string f;
+            string n;
+            string o;
+            string mail;
+            string password;
+            DateTime date_birth;
+            int id_country;
+            string telephone;
+            string gender;
+            string direction;
+            string _event;
+            byte[] photo;
+            int role;
+
+            byte[] fileData = File.ReadAllBytes(strUser);
+            string csvData = Encoding.UTF8.GetString(fileData);
+
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    f = num[1];
+                    n = num[2];
+                    o = num[3];
+                    mail = num[4];
+                    password = num[5];
+                    string g;
+                    try
+                    {
+                        g = $"{num[6][0]}{num[6][1]}/{num[6][3]}{num[6][4]}/{num[6][6]}{num[6][7]}{num[6][8]}{num[6][9]}";
+                        date_birth = DateTime.Parse(g);
+                    }
+                    catch
+                    {
+                        g = $"{num[6][3]}{num[6][4]}/{num[6][0]}{num[6][1]}/{num[6][6]}{num[6][7]}{num[6][8]}{num[6][9]}";
+                        date_birth = DateTime.Parse(g);
+
+                    }  
+                    id_country = Convert.ToInt32(num[7]);
+                    telephone = num[8];
+                    gender = num[9];
+                    direction = num[10];
+                    _event = num[11];
+                    photo = File.ReadAllBytes($"{strPhoto}{num[12]}");
+                    role = Convert.ToInt32(num[13]);
+                    dbdemEntities1.GetContext().User.Add(new User { id = id, first_name = f, last_name = n, patronymic = o, mail = mail, password = password, date_birth = date_birth, id_country = id_country, telephone = telephone, gender = gender, direction = direction, @event = _event, photo = photo, id_role = role });
+                }
+            }
+            dbdemEntities1.GetContext().SaveChanges();
+            Console.WriteLine("файл загружен3");
+        }
+
+        public static void AddCity(string strCity)
+        {
+            byte[] fileData = File.ReadAllBytes(strCity);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            int id;
+            string name;
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    
+                    name = num[1];
+                    dbdemEntities1.GetContext().City.Add(new City { id = id, name = name });
+                    if (Convert.ToInt32(num[0]) == 1117)
+                        break;
+                }
+                dbdemEntities1.GetContext().SaveChanges();
+                Console.WriteLine("файл загружен4");
+            }
+        }
+
+
+        
+
+        public static void AddEvent(string strEvent, string strPhoto)
+        {
+            byte[] fileData = File.ReadAllBytes(strEvent);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            int id;
+            string name;
+            DateTime date;
+            int day;
+            int? win;
+            int id_city;
+            byte[] photo;
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+                
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    id = Convert.ToInt32(num[0]);
+                    name = num[1];
+                    string g;
+                    try
+                    {
+                        g = $"{num[2][0]}{num[2][1]}/{num[2][3]}{num[2][4]}/{num[2][6]}{num[2][7]}{num[2][8]}{num[2][9]}";
+                        date = DateTime.Parse(g);
+                    }
+                    catch
+                    {
+                        g = $"{num[2][3]}{num[2][4]}/{num[2][0]}{num[2][1]}/{num[2][6]}{num[2][7]}{num[2][8]}{num[2][9]}";
+                        date = DateTime.Parse(g);
+                    }
+                    day = Convert.ToInt32(num[3]);
+                    try
+                    {
+                        win = Convert.ToInt32(num[4]);
+                    }
+                    catch
+                    {
+                        win = null;
+                    }
+                    
+                    id_city = Convert.ToInt32(num[5]);
+                    try
+                    {
+                        photo = File.ReadAllBytes($"{strPhoto}{num[6]}.jpg");
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            photo = File.ReadAllBytes($"{strPhoto}{num[6]}.jpeg");
+                        }
+                        catch
+                        {
+                            photo = File.ReadAllBytes($"{strPhoto}{num[6]}.png");
+                        }
+                        
+                    }
+                    
+                    dbdemEntities1.GetContext().Event.Add(new Event { id = id, name = name, start_date = date, day = day, id_winner = win, id_city= id_city, photo = photo  });
+                }
+                dbdemEntities1.GetContext().SaveChanges();
+                Console.WriteLine("файл загружен5");
+            }
+        }
+
+        public static void AddActivity(string strActivity)
+        {
+            
+            byte[] fileData = File.ReadAllBytes(strActivity);
+            string csvData = Encoding.UTF8.GetString(fileData);
+            int id;
+            int id_mer;
+            string name;
+            int day;
+            TimeSpan t;
+            int id_m;
+
+            using (StringReader reader = new StringReader(csvData))
+            {
+                string line;
+                int i = 0;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] num = line.Split(';');
+                    if (i == 0)
+                    {
+                        num[0] = num[0].Substring(1);
+                        i++;
+                    }
+                    
+                    id = Convert.ToInt32(num[0]);
+                    
+                    id_mer = Convert.ToInt32(num[1]);
+                    name = num[2];
+                    day = Convert.ToInt32(num[3]);
+                    t = TimeSpan.Parse(num[4]);
+                    id_m = Convert.ToInt32(num[5]);
+                    dbdemEntities1.GetContext().Activity.Add(new Activity { id = id, id_event = id_mer, name = name, day = day, time = t , id_moderator = id_m });
+                    if(id==30)
+                    {
+                        break;
+                    }
+                }
+                dbdemEntities1.GetContext().SaveChanges();
+                Console.WriteLine("файл загружен6");
+            }
+        }
+    }
+
+/////////
+//0cod0//
+////////
+
+
+
+/////////////////wpf/////////////
+
+
+
+Manager.cs
+
+public static Frame mainFrame { get; set; }
+
+        public static int _id;
+        public static string _first_name;
+        public static string _last_name;
+        public static string _patronymic;
+        public static string _mail; 
+        public static string _telephone;
+        public static string _gender;
+        public static byte[] _photo;
+        public static int _id_role;
+
+        public static void SetUser(int id, string first_name, string last_name, string patronymic, string mail, string telephone, string gender, byte[] photo, int id_role)
+        {
+            _id = id;
+            _first_name = first_name;
+            _last_name = last_name;
+            _patronymic = patronymic;
+            _mail = mail;
+            _telephone = telephone;
+            _gender = gender;
+            _photo = photo;
+            _id_role = id_role;
+        }
+
+
+
+
+
+
+StartWindow
+
+Datagrid
+
+<DataGrid Grid.Row="2" Name="dataGridName" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding name}" Width="400"></DataGridTextColumn>
+                <DataGridTextColumn Header="start time" Binding="{Binding start_date}" Width="120"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Картинка">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding photo}" Width="200" Height="200" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+dataGridName.ItemsSource = DemDBEntities.GetContext().Event.ToList();
+
+
+
+
+Photo
+
+if (Manager._photo != null)
+            {
+                BitmapImage img = new BitmapImage();
+                MemoryStream ms = new MemoryStream(Manager._photo);
+                img.BeginInit();
+                img.StreamSource = ms;
+                img.EndInit();
+                imageUser.Source = img;
+            }
+
+
+
+PageAddingMJ
+
+
+<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="197*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="397*"/>
+                <ColumnDefinition Width="403*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="219*"/>
+                    <RowDefinition Height="16*"/>
+                    <RowDefinition Height="29*"/>
+                    <RowDefinition Height="13*"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="29*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="188*"/>
+                    <ColumnDefinition Width="204*"/>
+                    <ColumnDefinition Width="11*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="1" Grid.Row="1" x:Name="photoUser"/>
+                <Button Grid.Column="1" Grid.Row="1" Background="Transparent" Click="clickPhotoUser" />
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Visibility="Hidden" Name="textPassV"/>
+                <PasswordBox Grid.Row="3" Grid.Column="1" Name="textPass"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Visibility="Hidden" Name="textPassV2"/>
+                <PasswordBox Grid.Row="5" Grid.Column="1" Name="textPass2"/>
+
+                <CheckBox Grid.Row="6" Name="passCheckBox"  Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Видимый пароль" FontSize="18" Unchecked="checkBox_Unchecked" Indeterminate="checkBox_Indeterminate" Checked="checkBox_Checked"/>
+
+                <Grid Grid.Row="7" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="83*"/>
+                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="81*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="ok" Click="okClick"/>
+                    <Button Grid.Column="2"/>
+
+                </Grid>
+
+            </Grid>
+
+
+
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="39*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="155*"/>
+                    <ColumnDefinition Width="242*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="1" Grid.Column="1" Background="#FF9E9D9D"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Id Number" FontFamily="Arial" FontSize="14"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="textId" Text="" FontFamily="Arial" FontSize="14"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="ФИО:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="3" Grid.Column="1" x:Name="textFIO"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Пол:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="5" Grid.Column="1" x:Name="polComboBox">
+                    <TextBlock><Run Text="Мужской"/></TextBlock>
+                    <TextBlock><Run Text="Женский"/></TextBlock>
+                </ComboBox>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Роль:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="7" Grid.Column="1" x:Name="roleComboBox" >
+                    <TextBlock><Run Text="Жюри"/></TextBlock>
+                    <TextBlock><Run Text="Модератор"/></TextBlock>
+                </ComboBox>
+
+                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Email:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="9" Grid.Column="1" x:Name="textEmail"/>
+
+                <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Телефон:" FontFamily="Arial" FontSize="14"/>
+                <xctk:MaskedTextBox Grid.Row="11" Grid.Column="1" Mask="+7 (000) 000-00-00" Name="textTl"/>
+
+                <TextBlock Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Направление:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="13" Grid.Column="1" Name="textD"/>
+
+                <CheckBox Grid.Row="15"  Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Прикрепить к мероприятию" Name="checkEvent"/>
+
+                <TextBlock Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Мероприятие:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="16" Grid.Column="1" x:Name="mComboBox"/>
+            </Grid>
+        </Grid>
+    </Grid>
+
+
+
+
+
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+
+
+
+
+
+int userId;
+        string link = "";
+
+        public PageAddingModeratorJury()
+        {
+            InitializeComponent();
+            var listEvent = DemDBEntities.GetContext().Event.ToList();
+            List<string> strEvents = new List<string>();
+            for (int i = 0; i < listEvent.Count; i++)
+            {
+                strEvents.Add(listEvent[i].name);
+            }
+            mComboBox.ItemsSource = strEvents;
+            var numUser = DemDBEntities.GetContext().User.ToList();
+            userId = numUser[numUser.Count - 1].id + 1;
+            textId.Text = $"{userId}";
+        }
+
+
+
+        private void clickPhotoUser(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                link = openFileDialog.FileName;
+                LoadImage(link);
+            }
+        }
+        private void LoadImage(string imagePath)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
+            bitmap.EndInit();
+            photoUser.Source = bitmap;
+        }
+
+        private void okClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string pol;
+                int role;
+                string eventId;
+                string pass;
+                byte[] photo;
+                if (polComboBox.SelectedIndex == 0)
+                    pol = "м";
+                else
+                    pol = "ж";
+                if (roleComboBox.SelectedIndex == 0)
+                    role = 3;
+                else
+                    role = 2;
+
+                if (checkEvent.IsChecked.Value)
+                    eventId = mComboBox.SelectedValue.ToString();
+                else
+                    eventId = null;
+                if (passCheckBox.IsChecked.Value)
+                {
+                    if (textPassV.Text == textPassV2.Text)
+                        pass = textPassV.Text;
+                    else
+                        throw new Exception("ошибка");
+                }
+                else
+                {
+                    if (textPass.Password == textPass2.Password)
+                        pass = textPassV.Text;
+                    else
+                        throw new Exception("ошибка");
+                }
+                photo = File.ReadAllBytes(link);
+
+                string[] strFIO = textFIO.Text.Split(' ');
+
+                DemDBEntities.GetContext().User.Add(new User { first_name = strFIO[0], last_name = strFIO[1], patronymic = strFIO[2], mail = textEmail.Text, password = pass, date_birth = DateTime.Now, id_country = 10, telephone = textTl.Text, gender = pol, direction = textD.Text, @event = eventId, photo = photo, id_role = role });
+                DemDBEntities.GetContext().SaveChanges();
+                Manager.mainFrame.Navigate(new PageUser());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ошибка ввода");
+            }
+        }
+
+        private void checkBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textPass.Visibility = Visibility.Visible;
+            textPassV.Visibility = Visibility.Hidden;
+            textPass.Password = textPassV.Text;
+
+            textPass2.Visibility = Visibility.Visible;
+            textPassV2.Visibility = Visibility.Hidden;
+            textPass2.Password = textPassV2.Text;
+        }
+
+        private void checkBox_Indeterminate(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            textPass.Visibility = Visibility.Hidden;
+            textPassV.Visibility = Visibility.Visible;
+            textPassV.Text = textPass.Password;
+
+            textPass2.Visibility = Visibility.Hidden;
+            textPassV2.Visibility = Visibility.Visible;
+            textPassV2.Text = textPass2.Password;
+        }
+
+
+
+
+
+капча 
+
+
+
+/// <summary>
+/// Interaction logic for PageCapcha.xaml
+/// </summary>
+public partial class PageCapcha : Page
+{
+public string captchaSymbol;
+public PageCapcha()
+{
+InitializeComponent();
+CaptchaStart();
+}
+public void CaptchaStart()
+{
+captchaSymbol = "";
+Random random = new Random();
+string[] font = { "Segoe Script", "Ink Free", "Microsoft Uighur", "MingLiU_HKSCS-ExtB", "Haettenschweiler" };
+string[] symbol = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "1", "2", "9", "u", "y", "w", "q", "m", "s", "k" };
+string symbol1 = symbol[random.Next(0, 20)];
+string symbol2 = symbol[random.Next(0, 20)];
+string symbol3 = symbol[random.Next(0, 20)];
+string symbol4 = symbol[random.Next(0, 20)];
+string symbol5 = symbol[random.Next(0, 20)];
+CaptchaSign1.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign2.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign3.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign4.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign5.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+captchaSymbol += symbol1 + symbol2 + symbol3 + symbol4 + symbol5;
+CaptchaSign1.Text = symbol1;
+CaptchaSign2.Text = symbol2;
+CaptchaSign3.Text = symbol3;
+CaptchaSign4.Text = symbol4;
+CaptchaSign5.Text = symbol5;
+}
+
+private void ButtonGoCaptchaClick(object sender, RoutedEventArgs e)
+{
+if (CaptchaEntry.Text == captchaSymbol)
+{
+Manager.MainFrame.GoBack();
+}
+else
+{
+CaptchaEntry.Text = "";
+CaptchaStart();
+}
+}
+
+private void ButtonRefreshCaptcha(object sender, RoutedEventArgs e)
+{
+CaptchaEntry.Text = "";
+CaptchaStart();
+}
+

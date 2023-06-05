@@ -1,0 +1,395 @@
+Manager.cs
+
+public static Frame mainFrame { get; set; }
+
+        public static int _id;
+        public static string _first_name;
+        public static string _last_name;
+        public static string _patronymic;
+        public static string _mail; 
+        public static string _telephone;
+        public static string _gender;
+        public static byte[] _photo;
+        public static int _id_role;
+
+        public static void SetUser(int id, string first_name, string last_name, string patronymic, string mail, string telephone, string gender, byte[] photo, int id_role)
+        {
+            _id = id;
+            _first_name = first_name;
+            _last_name = last_name;
+            _patronymic = patronymic;
+            _mail = mail;
+            _telephone = telephone;
+            _gender = gender;
+            _photo = photo;
+            _id_role = id_role;
+        }
+
+
+
+
+
+
+StartWindow
+
+Datagrid
+
+<DataGrid Grid.Row="2" Name="dataGridName" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding name}" Width="400"></DataGridTextColumn>
+                <DataGridTextColumn Header="start time" Binding="{Binding start_date}" Width="120"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Картинка">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding photo}" Width="200" Height="200" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+dataGridName.ItemsSource = DemDBEntities.GetContext().Event.ToList();
+
+
+
+
+Photo
+
+if (Manager._photo != null)
+            {
+                BitmapImage img = new BitmapImage();
+                MemoryStream ms = new MemoryStream(Manager._photo);
+                img.BeginInit();
+                img.StreamSource = ms;
+                img.EndInit();
+                imageUser.Source = img;
+            }
+
+
+
+PageAddingMJ
+
+
+<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="197*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="397*"/>
+                <ColumnDefinition Width="403*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="219*"/>
+                    <RowDefinition Height="16*"/>
+                    <RowDefinition Height="29*"/>
+                    <RowDefinition Height="13*"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="29*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="188*"/>
+                    <ColumnDefinition Width="204*"/>
+                    <ColumnDefinition Width="11*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="1" Grid.Row="1" x:Name="photoUser"/>
+                <Button Grid.Column="1" Grid.Row="1" Background="Transparent" Click="clickPhotoUser" />
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Visibility="Hidden" Name="textPassV"/>
+                <PasswordBox Grid.Row="3" Grid.Column="1" Name="textPass"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Visibility="Hidden" Name="textPassV2"/>
+                <PasswordBox Grid.Row="5" Grid.Column="1" Name="textPass2"/>
+
+                <CheckBox Grid.Row="6" Name="passCheckBox"  Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Видимый пароль" FontSize="18" Unchecked="checkBox_Unchecked" Indeterminate="checkBox_Indeterminate" Checked="checkBox_Checked"/>
+
+                <Grid Grid.Row="7" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="83*"/>
+                        <ColumnDefinition Width="40*"/>
+                        <ColumnDefinition Width="81*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="ok" Click="okClick"/>
+                    <Button Grid.Column="2"/>
+
+                </Grid>
+
+            </Grid>
+
+
+
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="39*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="155*"/>
+                    <ColumnDefinition Width="242*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="1" Grid.Column="1" Background="#FF9E9D9D"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Id Number" FontFamily="Arial" FontSize="14"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="textId" Text="" FontFamily="Arial" FontSize="14"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="ФИО:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="3" Grid.Column="1" x:Name="textFIO"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Пол:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="5" Grid.Column="1" x:Name="polComboBox">
+                    <TextBlock><Run Text="Мужской"/></TextBlock>
+                    <TextBlock><Run Text="Женский"/></TextBlock>
+                </ComboBox>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Роль:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="7" Grid.Column="1" x:Name="roleComboBox" >
+                    <TextBlock><Run Text="Жюри"/></TextBlock>
+                    <TextBlock><Run Text="Модератор"/></TextBlock>
+                </ComboBox>
+
+                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Email:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="9" Grid.Column="1" x:Name="textEmail"/>
+
+                <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Телефон:" FontFamily="Arial" FontSize="14"/>
+                <xctk:MaskedTextBox Grid.Row="11" Grid.Column="1" Mask="+7 (000) 000-00-00" Name="textTl"/>
+
+                <TextBlock Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Направление:" FontFamily="Arial" FontSize="14"/>
+                <TextBox Grid.Row="13" Grid.Column="1" Name="textD"/>
+
+                <CheckBox Grid.Row="15"  Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Прикрепить к мероприятию" Name="checkEvent"/>
+
+                <TextBlock Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Text="Мероприятие:" FontFamily="Arial" FontSize="14"/>
+                <ComboBox Grid.Row="16" Grid.Column="1" x:Name="mComboBox"/>
+            </Grid>
+        </Grid>
+    </Grid>
+
+
+
+
+
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+
+
+
+
+
+int userId;
+        string link = "";
+
+        public PageAddingModeratorJury()
+        {
+            InitializeComponent();
+            var listEvent = DemDBEntities.GetContext().Event.ToList();
+            List<string> strEvents = new List<string>();
+            for (int i = 0; i < listEvent.Count; i++)
+            {
+                strEvents.Add(listEvent[i].name);
+            }
+            mComboBox.ItemsSource = strEvents;
+            var numUser = DemDBEntities.GetContext().User.ToList();
+            userId = numUser[numUser.Count - 1].id + 1;
+            textId.Text = $"{userId}";
+        }
+
+
+
+        private void clickPhotoUser(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                link = openFileDialog.FileName;
+                LoadImage(link);
+            }
+        }
+        private void LoadImage(string imagePath)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
+            bitmap.EndInit();
+            photoUser.Source = bitmap;
+        }
+
+        private void okClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string pol;
+                int role;
+                string eventId;
+                string pass;
+                byte[] photo;
+                if (polComboBox.SelectedIndex == 0)
+                    pol = "м";
+                else
+                    pol = "ж";
+                if (roleComboBox.SelectedIndex == 0)
+                    role = 3;
+                else
+                    role = 2;
+
+                if (checkEvent.IsChecked.Value)
+                    eventId = mComboBox.SelectedValue.ToString();
+                else
+                    eventId = null;
+                if (passCheckBox.IsChecked.Value)
+                {
+                    if (textPassV.Text == textPassV2.Text)
+                        pass = textPassV.Text;
+                    else
+                        throw new Exception("ошибка");
+                }
+                else
+                {
+                    if (textPass.Password == textPass2.Password)
+                        pass = textPassV.Text;
+                    else
+                        throw new Exception("ошибка");
+                }
+                photo = File.ReadAllBytes(link);
+
+                string[] strFIO = textFIO.Text.Split(' ');
+
+                DemDBEntities.GetContext().User.Add(new User { first_name = strFIO[0], last_name = strFIO[1], patronymic = strFIO[2], mail = textEmail.Text, password = pass, date_birth = DateTime.Now, id_country = 10, telephone = textTl.Text, gender = pol, direction = textD.Text, @event = eventId, photo = photo, id_role = role });
+                DemDBEntities.GetContext().SaveChanges();
+                Manager.mainFrame.Navigate(new PageUser());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ошибка ввода");
+            }
+        }
+
+        private void checkBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textPass.Visibility = Visibility.Visible;
+            textPassV.Visibility = Visibility.Hidden;
+            textPass.Password = textPassV.Text;
+
+            textPass2.Visibility = Visibility.Visible;
+            textPassV2.Visibility = Visibility.Hidden;
+            textPass2.Password = textPassV2.Text;
+        }
+
+        private void checkBox_Indeterminate(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            textPass.Visibility = Visibility.Hidden;
+            textPassV.Visibility = Visibility.Visible;
+            textPassV.Text = textPass.Password;
+
+            textPass2.Visibility = Visibility.Hidden;
+            textPassV2.Visibility = Visibility.Visible;
+            textPassV2.Text = textPass2.Password;
+        }
+
+
+
+
+
+капча 
+
+
+
+/// <summary>
+/// Interaction logic for PageCapcha.xaml
+/// </summary>
+public partial class PageCapcha : Page
+{
+public string captchaSymbol;
+public PageCapcha()
+{
+InitializeComponent();
+CaptchaStart();
+}
+public void CaptchaStart()
+{
+captchaSymbol = "";
+Random random = new Random();
+string[] font = { "Segoe Script", "Ink Free", "Microsoft Uighur", "MingLiU_HKSCS-ExtB", "Haettenschweiler" };
+string[] symbol = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "1", "2", "9", "u", "y", "w", "q", "m", "s", "k" };
+string symbol1 = symbol[random.Next(0, 20)];
+string symbol2 = symbol[random.Next(0, 20)];
+string symbol3 = symbol[random.Next(0, 20)];
+string symbol4 = symbol[random.Next(0, 20)];
+string symbol5 = symbol[random.Next(0, 20)];
+CaptchaSign1.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign2.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign3.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign4.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+CaptchaSign5.FontFamily = new FontFamily(font[random.Next(0, 5)]);
+captchaSymbol += symbol1 + symbol2 + symbol3 + symbol4 + symbol5;
+CaptchaSign1.Text = symbol1;
+CaptchaSign2.Text = symbol2;
+CaptchaSign3.Text = symbol3;
+CaptchaSign4.Text = symbol4;
+CaptchaSign5.Text = symbol5;
+}
+
+private void ButtonGoCaptchaClick(object sender, RoutedEventArgs e)
+{
+if (CaptchaEntry.Text == captchaSymbol)
+{
+Manager.MainFrame.GoBack();
+}
+else
+{
+CaptchaEntry.Text = "";
+CaptchaStart();
+}
+}
+
+private void ButtonRefreshCaptcha(object sender, RoutedEventArgs e)
+{
+CaptchaEntry.Text = "";
+CaptchaStart();
+}
+
